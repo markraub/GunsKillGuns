@@ -22,6 +22,7 @@ public class BattleSystem : MonoBehaviour
     GunAction player;
     GunAction enemy;
 
+
     void Start()
     {
         state = BattleState.START;
@@ -36,6 +37,7 @@ public class BattleSystem : MonoBehaviour
         enemy = enemyGO.GetComponent<GunAction>();
 
         playerHUD.SetHUD(player);
+        playerHUD.SetPlayerButtons(player);
 
         enemyHUD.SetHUD(enemy);
 
@@ -85,9 +87,7 @@ public class BattleSystem : MonoBehaviour
         }
         //make this a thing? not like a thing, like a specific function for attack and whatever. Should be in a pistol class? 
         player.Attack();
-        state = BattleState.ENEMYTURN;
-        playerHUD.DisablePlayerUI();
-        StartCoroutine("EnemyTurn");
+        EndPlayerTurn();
 
     }
 
@@ -99,9 +99,9 @@ public class BattleSystem : MonoBehaviour
             return;
         }
         player.SpecialAttack();
-        state = BattleState.ENEMYTURN;
-        playerHUD.DisablePlayerUI();
-        StartCoroutine("EnemyTurn");
+        EndPlayerTurn();
+        
+
 
     }
 
@@ -113,6 +113,12 @@ public class BattleSystem : MonoBehaviour
             return;
         }
         player.Defend();
+        EndPlayerTurn();
+
+    }
+
+    public void EndPlayerTurn()
+    {
         state = BattleState.ENEMYTURN;
         playerHUD.DisablePlayerUI();
         StartCoroutine("EnemyTurn");
@@ -124,7 +130,6 @@ public class BattleSystem : MonoBehaviour
         if (enemy.GetCurrentAmmo() > 4)
         {
             enemy.SpecialAttack();
-            yield return new WaitForSeconds(3);
         }
         else if (enemy.GetCurrentAmmo() <= 4 && enemy.GetCurrentAmmo() >= 1)
         {

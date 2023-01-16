@@ -29,7 +29,14 @@ public class BattleHUD : MonoBehaviour
         maxHPText.text = gun.GetMaxHealth().ToString();
         hpSlider.maxValue = gun.GetMaxHealth();
         hpSlider.value = gun.GetCurrentHealth();
+
         DrawBullets(gun);
+    }
+
+    public void SetPlayerButtons(GunAction gun)
+    {
+        AttackButton.GetComponentInChildren<TextMeshProUGUI>().text = gun.RegularAttackName;
+        SpecialAttackButton.GetComponentInChildren<TextMeshProUGUI>().text = gun.SpecialAttackName;
     }
 
     public void SetHP(float hp)
@@ -52,7 +59,7 @@ public class BattleHUD : MonoBehaviour
     {
 
         Sprite BulletSprite;
-        BulletSprite = gun.GetAmmoType().GetComponent<SpriteRenderer>().sprite;
+        BulletSprite = gun.GetAmmoSprite();
         if (BulletImages.Length > 0)
         {
             foreach (GameObject bullet in BulletImages)

@@ -655,7 +655,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'PLAYER NAME
+  m_text: 'ENEMY NAME
 
 '
   m_isRightToLeft: 0
@@ -1019,7 +1019,7 @@ GameObject:
   - component: {fileID: 757902335}
   m_Layer: 0
   m_Name: LowerFloor
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1178,7 +1178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 793569008925012273, guid: 30bd6b6cae5594af992b60d507ad38c6, type: 3}
-  enemyPrefab: {fileID: 8383727102235779616, guid: 2d6817a1b6f334524a6e9f9ae9f7a269, type: 3}
+  enemyPrefab: {fileID: 793569008925012273, guid: c7936654ae70f48499432bf09c535c69, type: 3}
   state: 0
   playerSpawnPoint: {fileID: 825876440}
   enemySpawnPoint: {fileID: 1331473752}
@@ -1748,7 +1748,7 @@ GameObject:
   - component: {fileID: 1043671539}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

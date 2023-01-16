@@ -2,13 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class GunAction : MonoBehaviour
 {
-
-
-
-
     [Header("FX")]
     [SerializeField] Animator FireAnimation;
     [SerializeField] AudioClip FireSFX;
@@ -45,9 +40,6 @@ public class GunAction : MonoBehaviour
 
     [Header("Defend")]
     [SerializeField] int ReloadCount;
-
-
-
     private float currentHealth;
     private int currentAmmo;
 
@@ -56,8 +48,6 @@ public class GunAction : MonoBehaviour
     public bool Attacking = false;
 
     AudioSource gunAudioSource;
-
-
 
     void Awake()
     {
@@ -74,8 +64,6 @@ public class GunAction : MonoBehaviour
         float floatpos = Mathf.PingPong(Time.time * Speed, FloatDistance) - 1;
         transform.position = new Vector2(transform.position.x, floatpos);
     }
-
-
 
     private IEnumerator Fire(int Rounds, float Accuracy, GameObject AmmoType, float BulletSpeed, float AttackSpeed, bool Special)
     {
@@ -102,12 +90,12 @@ public class GunAction : MonoBehaviour
             bulletRigidBody.velocity += new Vector2(BulletSpeed * AimDirection, angle);
             if (bulletRigidBody.velocity.x < 0)
             {
-                bullet.GetComponent<SpriteRenderer>().flipX = true;
+                bullet.transform.localScale = new Vector3(-1, 1, 1);
             }
 
             currentAmmo--;
             gunAudioSource.PlayOneShot(FireSFX);
-            Destroy(bullet, 3f);
+            //Destroy(bullet, 3f);
             yield return new WaitForSeconds(AttackSpeed);
             
         }
@@ -148,11 +136,18 @@ public class GunAction : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet")
         {
+            Debug.Log("HIT");
             GameObject opponent = other.gameObject.transform.parent.gameObject;
             GunAction opponentGun = opponent.GetComponent<GunAction>();
             float opponentDamage = Random.Range(opponentGun.RegularAttackDamageLow, opponentGun.RegularAttackDamageHigh);
             currentHealth -= opponentDamage;
-            Destroy(other.gameObject, 0.1f);
+
+            BulletFX bullet = other.gameObject.GetComponent<BulletFX>();
+            bullet.ImpactParticles.Play();
+            bullet.BulletSR.sprite = bullet.ImpactSprite;
+            bullet.BulletRB.gravityScale = 2;
+
+            //Destroy(other.gameObject, 0.5f);
         }
         else if (other.gameObject.tag == "Special")
         {
@@ -160,11 +155,16 @@ public class GunAction : MonoBehaviour
             GunAction opponentGun = opponent.GetComponent<GunAction>();
             float opponentDamage = Random.Range(opponentGun.SpecialAttackDamageLow, opponentGun.SpecialAttackDamageHigh);
             currentHealth -= opponentDamage;
-            Destroy(other.gameObject, 0.1f);
+
+            BulletFX bullet = other.gameObject.GetComponent<BulletFX>();
+            bullet.ImpactParticles.Play();
+            bullet.BulletSR.sprite = bullet.ImpactSprite;
+            bullet.BulletRB.gravityScale = 2;
+
+
+            //Destroy(other.gameObject, 0.5f);
         }
     }
-
-
 
     public float GetCurrentHealth()
     {
@@ -190,8 +190,4 @@ public class GunAction : MonoBehaviour
     {
         return RegularAmmoType.GetComponent<SpriteRenderer>().sprite;
     }
-
-
-
-
 }

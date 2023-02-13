@@ -15,11 +15,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Guns
+  - Floor
+  - Clouds
+  - Background
+  - Foreground
   - 
   - 
   - 
@@ -44,4 +44,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 173089393
+    locked: 0
+  - name: Floor
+    uniqueID: 2196092557
+    locked: 0
+  - name: Clouds
+    uniqueID: 2580634671
+    locked: 0
+  - name: Guns
+    uniqueID: 1612379865
+    locked: 0
+  - name: Foreground
+    uniqueID: 1100344519
     locked: 0

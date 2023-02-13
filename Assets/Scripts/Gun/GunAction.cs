@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GunAction : MonoBehaviour
 {
+    [Header("Name")]
+    [SerializeField] public string GunName;
     [Header("FX")]
     [SerializeField] Animator FireAnimation;
     [SerializeField] AudioClip FireSFX;
@@ -22,9 +24,9 @@ public class GunAction : MonoBehaviour
     [SerializeField] public string RegularAttackName;
     [SerializeField] GameObject RegularAmmoType;
     [SerializeField] int RegularAttackCost;
-    [SerializeField] float RegularAttackDamageHigh;
-    [SerializeField] float RegularAttackDamageLow;
-    [SerializeField] float RegularAttackAccuracy;
+    [SerializeField] public float RegularAttackDamageHigh;
+    [SerializeField] public float RegularAttackDamageLow;
+    [SerializeField] public float RegularAttackAccuracy;
     [SerializeField] float RegularAttackRate;
     [SerializeField] float RegularAttackBulletSpeed;
 
@@ -67,17 +69,13 @@ public class GunAction : MonoBehaviour
 
     private IEnumerator Fire(int Rounds, float Accuracy, GameObject AmmoType, float BulletSpeed, float AttackSpeed, bool Special)
     {
-        int AimDirection = 1;
-        if (GetComponent<SpriteRenderer>().flipX)
-        {
-            AimDirection = -1;
-
-        }
+        int AimDirection = (int)transform.localScale.x;
         
         if (Rounds > currentAmmo) {yield break;}
         for (int i = Rounds; i > 0; i--)
         {
             GameObject bullet = Instantiate(AmmoType, new Vector3(transform.position.x + 1f * AimDirection, transform.position.y + 0.4f, 0), transform.rotation, transform);
+            bullet.transform.localScale = new Vector3(AimDirection, 1.0f, 1.0f);
             if (Special)
             {
                 bullet.tag = "Special";
@@ -95,7 +93,6 @@ public class GunAction : MonoBehaviour
 
             currentAmmo--;
             gunAudioSource.PlayOneShot(FireSFX);
-            //Destroy(bullet, 3f);
             yield return new WaitForSeconds(AttackSpeed);
             
         }

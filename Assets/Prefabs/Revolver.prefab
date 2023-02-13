@@ -76,9 +76,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: 1612379865
+  m_SortingLayer: 4
+  m_SortingOrder: 0
   m_Sprite: {fileID: -1268450507, guid: 485e48fdc9e2a4f72bb8a845bf574337, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db03aed427deb40899deb058da26217c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GunName: Revolver
   FireAnimation: {fileID: 0}
   FireSFX: {fileID: 8300000, guid: 5635d5238f9714dbc913a2a76fe6b9ea, type: 3}
   ReloadBulletSFX: {fileID: 8300000, guid: 8b45435fbc2954e5496366a75a0c4281, type: 3}

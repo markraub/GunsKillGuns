@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public enum BattleState {START, PLAYERTURN, ENEMYTURN, WON, LOST}
@@ -9,7 +10,6 @@ public enum BattleState {START, PLAYERTURN, ENEMYTURN, WON, LOST}
 public class BattleSystem : MonoBehaviour
 {
 
-    [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] BattleState state;
 
@@ -31,10 +31,13 @@ public class BattleSystem : MonoBehaviour
 
     void SetupBattle()
     {
-        GameObject playerGO = Instantiate(playerPrefab, playerSpawnPoint);
+        GameObject playerGO = Instantiate(GameData.PlayerGun, playerSpawnPoint);
         player = playerGO.GetComponent<GunAction>();
+        playerGO.name = player.GunName;
         GameObject enemyGO = Instantiate(enemyPrefab, enemySpawnPoint);
+        enemyGO.transform.localScale = new Vector3(-1f, 1f, 1f);
         enemy = enemyGO.GetComponent<GunAction>();
+        enemyGO.name = "Evil " + enemy.GunName;
 
         playerHUD.SetHUD(player);
         playerHUD.SetPlayerButtons(player);
@@ -59,6 +62,10 @@ public class BattleSystem : MonoBehaviour
 
     void PlayerTurn()
     {
+        if (player.GetCurrentHealth() <= 0)
+        {
+            SceneManager.LoadScene("GAME OVER");
+        } 
         if (player.GetCurrentAmmo() >= 1)
         {
             playerHUD.AttackButton.enabled = true;
@@ -126,6 +133,11 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator EnemyTurn()
     {
+
+        if (enemy.GetCurrentHealth() <= 0)
+        {
+            SceneManager.LoadScene("GAME OVER");
+        }
         yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
         if (enemy.GetCurrentAmmo() > 4)
         {

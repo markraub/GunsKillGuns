@@ -12,6 +12,7 @@ public class GunShadow : MonoBehaviour
     void Awake()
     {
         shadowSprite = GetComponent<SpriteRenderer>();
+        shadowSprite.sortingLayerName = "Guns";
 
     }
 

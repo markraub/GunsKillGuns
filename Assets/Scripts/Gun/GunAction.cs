@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class GunAction : MonoBehaviour
 {
+
+
+    public class Attack 
+    {
+        public string Name;
+        public GameObject AmmoType;
+        public int Cost;
+        public Vector2 Damage;
+        public float Accuracy;
+        public float Rate;
+        public float Speed;
+
+    }
+
+
     [Header("Name")]
     [SerializeField] public string GunName;
     [Header("FX")]
@@ -21,21 +36,19 @@ public class GunAction : MonoBehaviour
     [SerializeField] float MaxHealth;
 
     [Header("Regular Attack")]
-    [SerializeField] public string RegularAttackName;
+    [SerializeField] string RegularAttackName;
     [SerializeField] GameObject RegularAmmoType;
     [SerializeField] int RegularAttackCost;
-    [SerializeField] public float RegularAttackDamageHigh;
-    [SerializeField] public float RegularAttackDamageLow;
-    [SerializeField] public float RegularAttackAccuracy;
+    [SerializeField] Vector2 RegularAttackDamage;
+    [SerializeField] float RegularAttackAccuracy;
     [SerializeField] float RegularAttackRate;
     [SerializeField] float RegularAttackBulletSpeed;
 
     [Header("Special Attack")]
-    [SerializeField] public string SpecialAttackName;
+    [SerializeField] string SpecialAttackName;
     [SerializeField] GameObject SpecialAmmoType;
     [SerializeField] int SpecialAttackCost;
-    [SerializeField] float SpecialAttackDamageHigh;
-    [SerializeField] float SpecialAttackDamageLow;
+    [SerializeField] Vector2 SpecialAttackDamage;
     [SerializeField] float SpecialAttackAccuracy;
     [SerializeField] float SpecialAttackRate;
     [SerializeField] float SpecialAttackBulletSpeed;
@@ -47,18 +60,44 @@ public class GunAction : MonoBehaviour
 
     private Rigidbody2D pistolRigidBody;
 
-    public bool Attacking = false;
 
     AudioSource gunAudioSource;
 
+    Attack regularAttack;
+    Attack specialAttack;
+
+    Transform BulletSpawnPoint;
+
     void Awake()
     {
+
+        BulletSpawnPoint = transform.GetChild(1);
         currentAmmo = MaxAmmo;
         currentHealth = MaxHealth;
         gunAudioSource = GetComponent<AudioSource>();
         pistolRigidBody = GetComponent<Rigidbody2D>();
         FloatDistance += Random.Range(-0.3f, 0.3f);
         Speed += Random.Range(-0.3f, 0.3f);
+
+        regularAttack = new Attack();
+        regularAttack.Name = RegularAttackName;
+        regularAttack.AmmoType = RegularAmmoType;
+        regularAttack.Accuracy = RegularAttackAccuracy;
+        regularAttack.Cost = RegularAttackCost;
+        regularAttack.Damage = RegularAttackDamage;
+        regularAttack.Speed = RegularAttackBulletSpeed;
+        regularAttack.Rate = RegularAttackRate;
+
+        specialAttack = new Attack();
+        specialAttack.Name = SpecialAttackName;
+        specialAttack.AmmoType = SpecialAmmoType;
+        specialAttack.Accuracy = SpecialAttackAccuracy;
+        specialAttack.Cost = SpecialAttackCost;
+        specialAttack.Damage = SpecialAttackDamage;
+        specialAttack.Speed = SpecialAttackBulletSpeed;
+        specialAttack.Rate = SpecialAttackRate;
+    
+        
     }
 
     void Update()
@@ -74,8 +113,9 @@ public class GunAction : MonoBehaviour
         if (Rounds > currentAmmo) {yield break;}
         for (int i = Rounds; i > 0; i--)
         {
-            GameObject bullet = Instantiate(AmmoType, new Vector3(transform.position.x + 1f * AimDirection, transform.position.y + 0.4f, 0), transform.rotation, transform);
-            bullet.transform.localScale = new Vector3(AimDirection, 1.0f, 1.0f);
+            GameObject bullet = Instantiate(AmmoType, BulletSpawnPoint.position, transform.rotation, transform);
+            bullet.GetComponent<SpriteRenderer>().flipX = AimDirection < 0;
+            
             if (Special)
             {
                 bullet.tag = "Special";
@@ -96,7 +136,6 @@ public class GunAction : MonoBehaviour
             yield return new WaitForSeconds(AttackSpeed);
             
         }
-        Attacking = false;
         
     }
 
@@ -107,20 +146,18 @@ public class GunAction : MonoBehaviour
             if (currentAmmo == MaxAmmo){yield break;}
             currentAmmo++;
             gunAudioSource.PlayOneShot(ReloadBulletSFX);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.05f);
         }
         gunAudioSource.PlayOneShot(FinishReloadSFX);
     }
 
-    public void Attack()
+    public void RegularAttack()
     {
-        Attacking = true;
         StartCoroutine(Fire(RegularAttackCost, RegularAttackAccuracy, RegularAmmoType, RegularAttackBulletSpeed, RegularAttackRate, false));
     }
 
     public void SpecialAttack()
     {
-        Attacking = true;
         StartCoroutine(Fire(SpecialAttackCost, SpecialAttackAccuracy, SpecialAmmoType, SpecialAttackBulletSpeed, SpecialAttackRate, true));
     }
 
@@ -136,13 +173,14 @@ public class GunAction : MonoBehaviour
             Debug.Log("HIT");
             GameObject opponent = other.gameObject.transform.parent.gameObject;
             GunAction opponentGun = opponent.GetComponent<GunAction>();
-            float opponentDamage = Random.Range(opponentGun.RegularAttackDamageLow, opponentGun.RegularAttackDamageHigh);
+            float opponentDamage = Random.Range(opponentGun.regularAttack.Damage.x, opponentGun.regularAttack.Damage.y);
             currentHealth -= opponentDamage;
 
             BulletFX bullet = other.gameObject.GetComponent<BulletFX>();
             bullet.ImpactParticles.Play();
             bullet.BulletSR.sprite = bullet.ImpactSprite;
             bullet.BulletRB.gravityScale = 2;
+            
 
             //Destroy(other.gameObject, 0.5f);
         }
@@ -150,7 +188,7 @@ public class GunAction : MonoBehaviour
         {
             GameObject opponent = other.gameObject.transform.parent.gameObject;
             GunAction opponentGun = opponent.GetComponent<GunAction>();
-            float opponentDamage = Random.Range(opponentGun.SpecialAttackDamageLow, opponentGun.SpecialAttackDamageHigh);
+            float opponentDamage = Random.Range(opponentGun.specialAttack.Damage.x, opponentGun.specialAttack.Damage.y);
             currentHealth -= opponentDamage;
 
             BulletFX bullet = other.gameObject.GetComponent<BulletFX>();
@@ -186,5 +224,35 @@ public class GunAction : MonoBehaviour
     public Sprite GetAmmoSprite()
     {
         return RegularAmmoType.GetComponent<SpriteRenderer>().sprite;
+    }
+
+    public Attack GetAttack(bool Special = false)
+    {
+        if (Special)
+        {
+            specialAttack = new Attack();
+            specialAttack.Name = SpecialAttackName;
+            specialAttack.AmmoType = SpecialAmmoType;
+            specialAttack.Accuracy = SpecialAttackAccuracy;
+            specialAttack.Cost = SpecialAttackCost;
+            specialAttack.Damage = SpecialAttackDamage;
+            specialAttack.Speed = SpecialAttackBulletSpeed;
+            specialAttack.Rate = SpecialAttackRate;
+            return specialAttack;
+        }
+        else
+        {
+
+            regularAttack = new Attack();
+            regularAttack.Name = RegularAttackName;
+            regularAttack.AmmoType = RegularAmmoType;
+            regularAttack.Accuracy = RegularAttackAccuracy;
+            regularAttack.Cost = RegularAttackCost;
+            regularAttack.Damage = RegularAttackDamage;
+            regularAttack.Speed = RegularAttackBulletSpeed;
+            regularAttack.Rate = RegularAttackRate;
+            return regularAttack;
+        }
+
     }
 }

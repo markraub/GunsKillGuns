@@ -30,20 +30,18 @@ public class MenuManager : MonoBehaviour
         GunSelectMenu.enabled = true;
         GunSelectIndex = 0;
         DisplayGun(GunSelectIndex);
-
-        //hide title
-        //Show all gun options
-        
+        GameData.EnemyLevel = 0;
     }
 
     void DisplayGun(int Index)
     {
-        GunAction StarterGun = Guns[Index].GetComponent<GunAction>();
+        GunAction Gun = Guns[Index].GetComponent<GunAction>();
         GunImage.sprite = Guns[Index].GetComponent<SpriteRenderer>().sprite;
-        GunName.text = StarterGun.GunName;
-        GunHP.text = "HP: " + StarterGun.GetMaxHealth();
-        GunDamage.text = "DAMAGE: " + StarterGun.RegularAttackDamageLow + "-" + StarterGun.RegularAttackDamageHigh;
-        GunAccuracy.text = "ATTACKS: " + StarterGun.RegularAttackName + ", " + StarterGun.SpecialAttackName;
+        GunName.text = Gun.GunName;
+        GunHP.text = "HP: " + Gun.GetMaxHealth();
+        GunDamage.text = "DAMAGE: " + Gun.GetAttack().Damage.x + "-" + Gun.GetAttack().Damage.y;
+        GunAccuracy.text = "ACCURACY: " + Gun.GetAttack().Accuracy.ToString();
+        GunAttacks.text = "ATTACKS: " + Gun.GetAttack().Name + ", " + Gun.GetAttack(true).Name;
 
     }
 

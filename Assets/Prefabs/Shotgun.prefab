@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 793569008925012267}
   - component: {fileID: 793569008925012265}
   - component: {fileID: 793569008925012266}
-  - component: {fileID: 2499820201150252607}
+  - component: {fileID: -83641247807326626}
   m_Layer: 2
-  m_Name: Pistol
+  m_Name: Shotgun
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 793569009593764891}
-  - {fileID: 7843149279538192579}
+  - {fileID: 8397058893660936418}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 1612379865
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: -851597309, guid: 485e48fdc9e2a4f72bb8a845bf574337, type: 3}
+  m_Sprite: {fileID: 1579295581, guid: 485e48fdc9e2a4f72bb8a845bf574337, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -144,30 +144,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db03aed427deb40899deb058da26217c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GunName: Pistol
+  GunName: Shotgun
   FireAnimation: {fileID: 0}
   FireSFX: {fileID: 8300000, guid: 5635d5238f9714dbc913a2a76fe6b9ea, type: 3}
   ReloadBulletSFX: {fileID: 8300000, guid: 8b45435fbc2954e5496366a75a0c4281, type: 3}
   FinishReloadSFX: {fileID: 8300000, guid: d3f1051eb93204d488e48a422e202041, type: 3}
-  FloatDistance: 2
-  Speed: 1
-  MaxAmmo: 9
-  MaxHealth: 30
-  RegularAttackName: Single Shot
+  FloatDistance: 3
+  Speed: 2
+  MaxAmmo: 8
+  MaxHealth: 35
+  RegularAttackName: Blast
   RegularAmmoType: {fileID: 2957443165493110905, guid: 107916fbceec34b829f234f63d00a3b5, type: 3}
-  RegularAttackCost: 1
-  RegularAttackDamage: {x: 3, y: 10}
-  RegularAttackAccuracy: 2
-  RegularAttackRate: 0.5
-  RegularAttackBulletSpeed: 20
-  SpecialAttackName: Triple Shot
+  RegularAttackCost: 4
+  RegularAttackDamage: {x: 1, y: 6}
+  RegularAttackAccuracy: 10
+  RegularAttackRate: 0.01
+  RegularAttackBulletSpeed: 35
+  SpecialAttackName: Bigger Blast
   SpecialAmmoType: {fileID: 2957443165493110905, guid: 107916fbceec34b829f234f63d00a3b5, type: 3}
-  SpecialAttackCost: 3
-  SpecialAttackDamage: {x: 3, y: 10}
-  SpecialAttackAccuracy: 2
-  SpecialAttackRate: 0.5
-  SpecialAttackBulletSpeed: 20
-  ReloadCount: 1
+  SpecialAttackCost: 8
+  SpecialAttackDamage: {x: 1, y: 6}
+  SpecialAttackAccuracy: 10
+  SpecialAttackRate: 0.01
+  SpecialAttackBulletSpeed: 35
+  ReloadCount: 4
 --- !u!82 &793569008925012266
 AudioSource:
   m_ObjectHideFlags: 0
@@ -264,7 +264,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!60 &2499820201150252607
+--- !u!60 &-83641247807326626
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,7 +281,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.25, y: 1}
+    oldSize: {x: 2.375, y: 0.875}
     newSize: {x: 0.375, y: 0.28125}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -289,32 +289,34 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.625, y: 0.5}
-      - {x: -0.6226579, y: 0.36057472}
-      - {x: -0.5045975, y: 0.3694937}
-      - {x: -0.508752, y: 0.12318781}
-      - {x: -0.61567986, y: 0.119188935}
-      - {x: -0.60984266, y: -0.0059340894}
-      - {x: -0.5037869, y: -0.012359515}
-      - {x: -0.50655615, y: -0.1166545}
-      - {x: -0.6173255, y: -0.1321222}
-      - {x: -0.6132791, y: -0.38259283}
-      - {x: -0.4982164, y: -0.37665987}
-      - {x: -0.4894405, y: -0.5}
-      - {x: -0.24800321, y: -0.4972445}
-      - {x: -0.23032224, y: -0.37274328}
-      - {x: -0.12395018, y: -0.36821696}
-      - {x: -0.12143722, y: -0.12180136}
-      - {x: 0.001033768, y: -0.1255776}
-      - {x: 0.0011378378, y: -0.2558587}
-      - {x: 0.12659545, y: -0.25129545}
-      - {x: 0.12730038, y: -0.12307148}
-      - {x: 0.25225, y: -0.123050936}
-      - {x: 0.2571638, y: 0.0015014485}
-      - {x: 0.48944044, y: 0.0028133392}
-      - {x: 0.49765044, y: 0.12745486}
-      - {x: 0.6264264, y: 0.12739013}
-      - {x: 0.62887317, y: 0.5077462}
+    - - {x: -0.30790234, y: 0.4400734}
+      - {x: -0.31054097, y: 0.3109758}
+      - {x: -0.43642372, y: 0.31263477}
+      - {x: -0.43705872, y: 0.18807761}
+      - {x: -0.55899686, y: 0.19193886}
+      - {x: -0.56376857, y: 0.3125829}
+      - {x: -1.0614052, y: 0.31397846}
+      - {x: -1.0611533, y: 0.1841116}
+      - {x: -1.1819414, y: 0.1894932}
+      - {x: -1.188145, y: -0.06487808}
+      - {x: -1.0609558, y: -0.070162505}
+      - {x: -1.0603396, y: -0.31212953}
+      - {x: -0.92969745, y: -0.31259584}
+      - {x: -0.9353104, y: -0.44007337}
+      - {x: -0.18695107, y: -0.4394719}
+      - {x: -0.1869581, y: -0.3132552}
+      - {x: -0.06836009, y: -0.3136825}
+      - {x: -0.061232567, y: -0.1835061}
+      - {x: 0.30906972, y: -0.18777494}
+      - {x: 0.31417266, y: -0.07145381}
+      - {x: 0.5566966, y: -0.06602618}
+      - {x: 0.5636953, y: -0.19132471}
+      - {x: 0.9308615, y: -0.1877156}
+      - {x: 0.935426, y: -0.07151544}
+      - {x: 1.0542891, y: -0.06445177}
+      - {x: 1.0588318, y: 0.054012656}
+      - {x: 1.1908623, y: 0.060956858}
+      - {x: 1.1875, y: 0.4375}
 --- !u!1 &793569009593764964
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee0242b1b8a24a789591fb25e808151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &3916757152035194993
+--- !u!1 &4139553943275472892
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -433,7 +435,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7843149279538192579}
+  - component: {fileID: 8397058893660936418}
   m_Layer: 2
   m_Name: BulletSpawn
   m_TagString: Untagged
@@ -441,15 +443,15 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7843149279538192579
+--- !u!4 &8397058893660936418
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3916757152035194993}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0.3, z: 0}
+  m_GameObject: {fileID: 4139553943275472892}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.46, y: 0.28, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

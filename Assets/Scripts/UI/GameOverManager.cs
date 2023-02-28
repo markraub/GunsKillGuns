@@ -7,6 +7,13 @@ public class GameOverManager : MonoBehaviour
 {
    public void OnReturnClick()
    {
-    SceneManager.LoadScene("Main Menu");
+      if (SceneManager.GetActiveScene().name == "WIN")
+      {
+         SceneManager.LoadScene("Battle");
+      }
+      else
+      {
+         SceneManager.LoadScene("Main Menu");
+      }
    }
 }

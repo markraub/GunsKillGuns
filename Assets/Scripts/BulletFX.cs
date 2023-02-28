@@ -12,12 +12,16 @@ public class BulletFX : MonoBehaviour
     public SpriteRenderer BulletSR;
     public Rigidbody2D BulletRB;
 
+    public PhysicsMaterial2D BulletPM;
+
     void Awake()
     {
         ImpactParticles = GetComponent<ParticleSystem>();
         BulletSR = GetComponent<SpriteRenderer>();
         BulletRB = GetComponent<Rigidbody2D>();
         BulletSR.sprite = BulletSprite;
+
+        BulletPM = BulletRB.sharedMaterial;
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -26,6 +30,8 @@ public class BulletFX : MonoBehaviour
         {
             BulletSR.sprite = ImpactSprite;
             BulletRB.gravityScale = 2;
+            BulletPM.bounciness = 0;
+            BulletPM.friction = 1;
         }
     }
 

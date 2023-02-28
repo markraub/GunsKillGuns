@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 793569008925012267}
   - component: {fileID: 793569008925012265}
   - component: {fileID: 793569008925012266}
-  - component: {fileID: 1046622888980492123}
+  - component: {fileID: 2822234575806233568}
   m_Layer: 2
   m_Name: Revolver
   m_TagString: Player
@@ -35,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 793569009593764891}
+  - {fileID: 6377763126540309868}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -148,28 +149,25 @@ MonoBehaviour:
   FireSFX: {fileID: 8300000, guid: 5635d5238f9714dbc913a2a76fe6b9ea, type: 3}
   ReloadBulletSFX: {fileID: 8300000, guid: 8b45435fbc2954e5496366a75a0c4281, type: 3}
   FinishReloadSFX: {fileID: 8300000, guid: d3f1051eb93204d488e48a422e202041, type: 3}
-  FloatDistance: 2
-  Speed: 1
-  MaxAmmo: 9
-  MaxHealth: 100
+  FloatDistance: 1.7
+  Speed: 2
+  MaxAmmo: 6
+  MaxHealth: 25
   RegularAttackName: Quick Draw
   RegularAmmoType: {fileID: 2957443165493110905, guid: 107916fbceec34b829f234f63d00a3b5, type: 3}
   RegularAttackCost: 1
-  RegularAttackDamageHigh: 15
-  RegularAttackDamageLow: 5
-  RegularAttackAccuracy: 5
+  RegularAttackDamage: {x: 5, y: 15}
+  RegularAttackAccuracy: 1.65
   RegularAttackRate: 0.8
-  RegularAttackBulletSpeed: 20
-  SpecialAttackName: Triple Shot
+  RegularAttackBulletSpeed: 40
+  SpecialAttackName: Unload
   SpecialAmmoType: {fileID: 2957443165493110905, guid: 107916fbceec34b829f234f63d00a3b5, type: 3}
-  SpecialAttackCost: 3
-  SpecialAttackDamageHigh: 10
-  SpecialAttackDamageLow: 1
-  SpecialAttackAccuracy: 5
-  SpecialAttackRate: 0
-  SpecialAttackBulletSpeed: 15
-  ReloadCount: 1
-  Attacking: 0
+  SpecialAttackCost: 6
+  SpecialAttackDamage: {x: 5, y: 15}
+  SpecialAttackAccuracy: 2
+  SpecialAttackRate: 0.15
+  SpecialAttackBulletSpeed: 40
+  ReloadCount: 2
 --- !u!82 &793569008925012266
 AudioSource:
   m_ObjectHideFlags: 0
@@ -182,7 +180,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0
+  m_Volume: 0.3
   m_Pitch: 0.75
   Loop: 0
   Mute: 0
@@ -266,8 +264,8 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!61 &1046622888980492123
-BoxCollider2D:
+--- !u!60 &2822234575806233568
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -289,9 +287,31 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.25, y: 1}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.5052225, y: 0.5602726}
+      - {x: 0.49373913, y: 0.43999007}
+      - {x: -0.5052771, y: 0.43612576}
+      - {x: -0.50390285, y: -0.054694325}
+      - {x: -0.6190908, y: -0.069095716}
+      - {x: -0.62767136, y: -0.18460864}
+      - {x: -0.746622, y: -0.18789913}
+      - {x: -0.7499072, y: -0.44239545}
+      - {x: -0.6217086, y: -0.4436339}
+      - {x: -0.62362576, y: -0.5625}
+      - {x: -0.37609562, y: -0.5634138}
+      - {x: -0.36789376, y: -0.44280505}
+      - {x: -0.12534276, y: -0.44076642}
+      - {x: -0.0046998276, y: -0.43945152}
+      - {x: -0.0015066266, y: -0.31518546}
+      - {x: 0.12762368, y: -0.3046714}
+      - {x: 0.1226266, y: -0.19020139}
+      - {x: 0.24504164, y: -0.18200356}
+      - {x: 0.25614768, y: 0.06273821}
+      - {x: 0.6234001, y: 0.05410648}
+      - {x: 0.62515414, y: 0.18494667}
+      - {x: 0.75, y: 0.18027148}
+      - {x: 0.75, y: 0.5625}
 --- !u!1 &793569009593764964
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,3 +422,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee0242b1b8a24a789591fb25e808151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4348389682408198650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6377763126540309868}
+  m_Layer: 2
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6377763126540309868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4348389682408198650}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1, y: 0.26, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 793569008925012277}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

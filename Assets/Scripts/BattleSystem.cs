@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 
 public enum BattleState {START, PLAYERTURN, ENEMYTURN, WON, LOST}
@@ -10,7 +11,6 @@ public enum BattleState {START, PLAYERTURN, ENEMYTURN, WON, LOST}
 public class BattleSystem : MonoBehaviour
 {
 
-    [SerializeField] GameObject enemyPrefab;
     [SerializeField] BattleState state;
 
     [SerializeField] Transform playerSpawnPoint;
@@ -18,26 +18,40 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] BattleHUD playerHUD;
     [SerializeField] BattleHUD enemyHUD;
+    [SerializeField] Slider TimerSlider;
+    [SerializeField] float TurnTime;
+    [SerializeField] TextMeshProUGUI EnemyTurnTextObject;
+    [SerializeField] TextMeshProUGUI PlayerTurnTextObject;
 
+    [Header("Enemy Settings")]
+    [SerializeField] GameObject[] EnemyOrder;
+    float currentTurnTime;
     GunAction player;
     GunAction enemy;
+    private bool takenTurn = false;
 
 
     void Start()
     {
         state = BattleState.START;
+        currentTurnTime = TurnTime;
         SetupBattle();
     }
 
     void SetupBattle()
     {
+        if (GameData.PlayerGun == null)
+        {
+            GameData.PlayerGun = EnemyOrder[GameData.EnemyLevel];
+        }
         GameObject playerGO = Instantiate(GameData.PlayerGun, playerSpawnPoint);
         player = playerGO.GetComponent<GunAction>();
         playerGO.name = player.GunName;
-        GameObject enemyGO = Instantiate(enemyPrefab, enemySpawnPoint);
+        GameObject enemyGO = Instantiate(EnemyOrder[GameData.EnemyLevel], enemySpawnPoint);
         enemyGO.transform.localScale = new Vector3(-1f, 1f, 1f);
         enemy = enemyGO.GetComponent<GunAction>();
         enemyGO.name = "Evil " + enemy.GunName;
+
 
         playerHUD.SetHUD(player);
         playerHUD.SetPlayerButtons(player);
@@ -55,25 +69,23 @@ public class BattleSystem : MonoBehaviour
         else
         {
             state = BattleState.ENEMYTURN;
-            StartCoroutine("EnemyTurn");
+            EnemyTurn();
         }
 
     }
 
     void PlayerTurn()
     {
-        if (player.GetCurrentHealth() <= 0)
-        {
-            SceneManager.LoadScene("GAME OVER");
-        } 
-        if (player.GetCurrentAmmo() >= 1)
+        
+
+        if (player.GetCurrentAmmo() >= player.GetAttack().Cost)
         {
             playerHUD.AttackButton.enabled = true;
             playerHUD.AttackButton.gameObject.SetActive(true);
 
         }
 
-        if (player.GetCurrentAmmo() >= 3)
+        if (player.GetCurrentAmmo() >= player.GetAttack(true).Cost)
         {
             playerHUD.SpecialAttackButton.enabled = true;
             playerHUD.SpecialAttackButton.gameObject.SetActive(true);
@@ -87,20 +99,17 @@ public class BattleSystem : MonoBehaviour
 
     public void OnAttackButton()
     {
-        Debug.Log("Attack!!");
         if (state != BattleState.PLAYERTURN)
         {
             return;
         }
-        //make this a thing? not like a thing, like a specific function for attack and whatever. Should be in a pistol class? 
-        player.Attack();
+        player.RegularAttack();
         EndPlayerTurn();
 
     }
 
     public void OnSpecialAttackButton()
     {
-        Debug.Log("Special Attack!");
         if (state != BattleState.PLAYERTURN)
         {
             return;
@@ -108,13 +117,10 @@ public class BattleSystem : MonoBehaviour
         player.SpecialAttack();
         EndPlayerTurn();
         
-
-
     }
 
     public void OnDefendButton()
     {
-        Debug.Log("Reloading!");
         if (state != BattleState.PLAYERTURN)
         {
             return;
@@ -126,45 +132,125 @@ public class BattleSystem : MonoBehaviour
 
     public void EndPlayerTurn()
     {
+        currentTurnTime = TurnTime;
         state = BattleState.ENEMYTURN;
+        takenTurn = false;
         playerHUD.DisablePlayerUI();
-        StartCoroutine("EnemyTurn");
+        //EnemyTurn();
     }
 
-    IEnumerator EnemyTurn()
+    void EnemyTurn()
     {
-
-        if (enemy.GetCurrentHealth() <= 0)
-        {
-            SceneManager.LoadScene("GAME OVER");
-        }
-        yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
-        if (enemy.GetCurrentAmmo() > 4)
+        
+        if (enemy.GetCurrentAmmo() > enemy.GetAttack(true).Cost)
         {
             enemy.SpecialAttack();
+            takenTurn = true;
+
+
         }
-        else if (enemy.GetCurrentAmmo() <= 4 && enemy.GetCurrentAmmo() >= 1)
+        else if (enemy.GetCurrentAmmo() <= enemy.GetAttack(true).Cost && enemy.GetCurrentAmmo() >= 1)
         {
-            enemy.Attack();
+            enemy.RegularAttack();
+            takenTurn = true;
+
         }
         else
         {
             enemy.Defend();
+            takenTurn = true;
         }
-        state = BattleState.PLAYERTURN;
-        PlayerTurn();
-
+       
     }
 
+    void EndEnemyTurn()
+    {
+        state = BattleState.PLAYERTURN;
+        currentTurnTime = TurnTime;
+        StartCoroutine(TurnTitleAnimator(PlayerTurnTextObject, 0.5f));
+        PlayerTurn();
+    }
+
+    IEnumerator TurnTitleAnimator(TextMeshProUGUI Title, float speed)
+    {
+        float xpos = -600;
+        RectTransform title_pos = Title.GetComponent<RectTransform>();
+        Title.enabled = true;
+        title_pos.position = new Vector3(xpos, 0, 0);
+
+
+        while (xpos <= 0)
+        {
+            title_pos.position = new Vector3(xpos, 0, 0);
+            xpos += 1 * Time.deltaTime;
+            yield return new WaitForSeconds(speed/10);
+        }
+        yield return new WaitForSeconds(1);
+        Title.enabled = false;
+    }
 
 
     void Update()
     {
+        if (state != BattleState.START || state != BattleState.WON || state != BattleState.LOST)
+        {
+            if (state == BattleState.PLAYERTURN)
+            {
+                if (player.GetCurrentHealth() <= 0)
+                {
+                    state = BattleState.LOST;
+                    SceneManager.LoadScene("GAME OVER");
+                }
+                else if (enemy.GetCurrentHealth() <= 0)
+                {
+                    state = BattleState.WON;
+                    SceneManager.LoadScene("WIN");
+                }
 
+                currentTurnTime -= Time.deltaTime;
+                TimerSlider.value = currentTurnTime / TurnTime;
+
+                if (currentTurnTime <= 0)
+                {
+                    EndPlayerTurn();
+                }
+            }
+            else if (state == BattleState.ENEMYTURN)
+            {
+               if (player.GetCurrentHealth() <= 0)
+                {
+                    state = BattleState.LOST;
+                    SceneManager.LoadScene("GAME OVER");
+                }
+                else if (enemy.GetCurrentHealth() <= 0)
+                {
+                    state = BattleState.WON;
+                    
+                    GameData.EnemyLevel++;
+                    if (GameData.EnemyLevel > 9){
+                        GameData.EnemyLevel = 0;
+                    }
+                    SceneManager.LoadScene("WIN");
+                }
+
+
+                float turnBuffer = Random.Range(TurnTime / 2, TurnTime - 2);
+                if (currentTurnTime <= turnBuffer && !takenTurn)
+                {
+                    EnemyTurn(); 
+                }
+                
+                currentTurnTime -= Time.deltaTime;
+                TimerSlider.value = currentTurnTime / TurnTime;
+
+                if (currentTurnTime <= 0)
+                {
+                    EndEnemyTurn();
+                }
+            }
+        }
         playerHUD.SetHUD(player);
         enemyHUD.SetHUD(enemy);
-
-
 
     }
 

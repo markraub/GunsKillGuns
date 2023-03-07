@@ -126,10 +126,7 @@ public class GunAction : MonoBehaviour
 
             float angle = Random.Range(-Accuracy, Accuracy);
             bulletRigidBody.velocity += new Vector2(BulletSpeed * AimDirection, angle);
-            if (bulletRigidBody.velocity.x < 0)
-            {
-                bullet.transform.localScale = new Vector3(-1, 1, 1);
-            }
+
 
             currentAmmo--;
             gunAudioSource.PlayOneShot(FireSFX);

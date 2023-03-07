@@ -16,8 +16,8 @@ public class CloudScroller : MonoBehaviour
 
     void Update()
     {
-        //cloudSR.sprit += Speed * Time.deltaTime;
-
+        cloudSR.material.mainTextureOffset += Time.deltaTime * Speed;
+  
 
         
     }
